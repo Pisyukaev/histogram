@@ -1,4 +1,4 @@
-const frame = document.querySelector("#frame");
+const frame = document.getElementById("frame");
 document.querySelector("input").addEventListener("keyup", (e) => {
     refresh(e.target.value);
 })
