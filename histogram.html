@@ -44,9 +44,15 @@
 
     function refresh() {
         const coof = Math.max(...values) / 320
-        coloumns.forEach((coloumn, index) => {
-            coloumn.style.height = values[index] / coof + "px";
-        })
+        if(coof > 0) {
+            coloumns.forEach((coloumn, index) => {
+                coloumn.style.height = values[index] / coof + "px";
+            })
+        } else {
+            coloumns.forEach((coloumn) => {
+                coloumn.style.height = 0 + "px";
+            })
+        }
     }
 
     function enforceMinMax(el) {
