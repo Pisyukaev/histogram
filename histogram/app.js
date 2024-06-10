@@ -1,5 +1,5 @@
 const frame = document.getElementById("frame");
-document.getElementById("input").addEventListener("keyup", (e) => {
+document.getElementById("input").addEventListener("input", (e) => {
     refresh(e.target.value);
 })
 
