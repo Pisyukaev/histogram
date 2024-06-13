@@ -11,11 +11,11 @@ function refresh(data) {
     const coof = Math.max(...values) / COLUMN_MAX_HEIGHT;
 
     for(let i = frame.children.length - 1; i >= values.length; i--) {
-        column = frame.children[i].children[0];
+        column = frame.children[i];
         if(!column.classList.contains('deleted')){
             column.classList.add('deleted');
             column.addEventListener("transitionend", (e) => {
-                frame.removeChild(e.target.parentElement);
+                frame.removeChild(e.target);
             }, { once: true });
         }
     }
@@ -24,16 +24,13 @@ function refresh(data) {
         values.forEach((value, index) => {
             const elem = frame.children[index];
             const desiredHeight = value / coof;
-            if(elem && !elem?.children[0].classList.contains('deleted')) {
-                elem.children[0].style.height = desiredHeight + "px";
+            if(elem && !elem?.classList.contains('deleted')) {
+                elem.style.height = desiredHeight + "px";
             } else {
                 const column = document.createElement('div');
-                const wrapper = document.createElement('div');
-                wrapper.className = "flex flex-col justify-end";
-                column.className = `mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
+                column.className = `flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
                 to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
-                wrapper.appendChild(column);
-                frame.appendChild(wrapper);
+                frame.appendChild(column);
                 requestAnimationFrame(() => {
                     column.style.height = desiredHeight + "px";
                     column.style.width = COLUMN_WIDTH + "px";
