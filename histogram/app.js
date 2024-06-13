@@ -1,14 +1,14 @@
 const frame = document.getElementById("frame");
-const column_width = 56;
-const column_max_height = 320;
-const column_gap = 28;
+const COLUMN_WIDTH = 56;
+const COLUMN_MAX_HEIGHT = 320;
+const COLUMN_GAP = 28;
 document.getElementById("input").addEventListener("input", (e) => {
     refresh(e.target.value);
 })
 
 function refresh(data) {
     const values = data.split(" ").filter(e => Number(e) || e == "0");
-    const coof = Math.max(...values) / column_max_height;
+    const coof = Math.max(...values) / COLUMN_MAX_HEIGHT;
 
     for(let i = frame.children.length - 1; i >= values.length; i--) {
         column = frame.children[i].children[0];
@@ -36,11 +36,11 @@ function refresh(data) {
                 frame.appendChild(wrapper);
                 requestAnimationFrame(() => {
                     column.style.height = desiredHeight + "px";
-                    column.style.width = column_width + "px";
+                    column.style.width = COLUMN_WIDTH + "px";
                 })
             }
         });
     }
 
-    frame.style.width = Math.abs(values.length * column_width + (values.length - 1) * column_gap) + "px";
+    frame.style.width = Math.abs(values.length * COLUMN_WIDTH + (values.length - 1) * COLUMN_GAP) + "px";
 }
