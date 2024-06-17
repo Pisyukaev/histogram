@@ -2,11 +2,11 @@ const frame = document.getElementById("frame");
 const COLUMN_WIDTH = 56;
 const COLUMN_MAX_HEIGHT = 320;
 const COLUMN_GAP = 28;
+const CONTEXTMENU_HEIGHT = 90;
+const PADDING_MENU_OFFSET = 50;
 document.getElementById("input").addEventListener("input", (e) => {
     refresh(e.target.value);
 })
-
-document.body.addEventListener('click', contextMenu)
 
 function refresh(data) {
     const values = data.split(" ").filter(e => Number(e) || e == "0");
@@ -28,19 +28,18 @@ function refresh(data) {
             const desiredHeight = value / coof;
             if(elem && !elem?.classList.contains('deleted')) {
                 elem.style.height = desiredHeight + "px";
-                elem.value = value;
-                elem.id = index;
+                elem.id = `${index} ${value}`;
             } else {
                 const column = document.createElement('div');
-                column.className = `column cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
+                column.className = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
                 to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
                 frame.appendChild(column);
                 requestAnimationFrame(() => {
                     column.style.height = desiredHeight + "px";
                     column.style.width = COLUMN_WIDTH + "px";
-                    column.value = value;
-                    column.id = index;
+                    column.id = `${index} ${value}`;
                 });
+                column.addEventListener('click', handleContextMenu);
             }
         });
     }
@@ -48,30 +47,33 @@ function refresh(data) {
     frame.style.width = Math.abs(values.length * COLUMN_WIDTH + (values.length - 1) * COLUMN_GAP) + "px";
 }
 
-function contextMenu(e) {
-    const obsolete = document.querySelectorAll('.menu');
+function handleContextMenu(e) {
+    const menu = document.createElement('div');
+    const info = document.createElement('h3');
 
-    obsolete.forEach((menu) => {
-        menu.addEventListener("transitionend", (e) => {
-            document.body.removeChild(e.target);
-        }, { once: true });
-        menu.classList.add('deleted');
+    info.innerText = `#${parseInt(e.target.id.split(" ")[0]) + 1}\nValue: ${e.target.id.split(" ")[1]}`;
+    info.className = "text-slate-300 whitespace-nowrap w-fit";
+    menu.className = `absolute top-[${e.pageY}px] left-[${e.pageX}px] bg-zinc-900 bg-opacity-40 border-[1px] overflow-hidden
+    opacity-0 w-0 h-0 transition-all duration-[200ms] border-zinc-700 backdrop-blur-md rounded-xl py-3 px-5 shadow-lg`;
+    menu.appendChild(info);
+    document.body.appendChild(menu);
+    requestAnimationFrame(() => {
+        menu.style.height = CONTEXTMENU_HEIGHT + "px";
+        menu.style.width = info.getBoundingClientRect().width + PADDING_MENU_OFFSET + "px";
+        menu.style.opacity = "1";
     });
 
-    if(e.target.classList.contains('column')) {
-        const menu = document.createElement('div');
-        const info = document.createElement('h3');
-    
-        info.innerText = `#${parseInt(e.target.id) + 1}\nValue: ${e.target.value}`;
-        info.className = "text-slate-300 whitespace-nowrap w-fit";
-        menu.className = `menu absolute top-[${e.pageY}px] left-[${e.pageX}px] bg-zinc-900 bg-opacity-40 border-[1px] overflow-hidden
-        opacity-0 w-0 h-0 transition-all duration-[200ms] border-zinc-700 backdrop-blur-md rounded-xl py-3 px-5 shadow-lg`;
-        menu.appendChild(info);
-        document.body.appendChild(menu);
-        requestAnimationFrame(() => {
-            menu.style.height = "90px";
-            menu.style.width = info.getBoundingClientRect().width + 40 + "px";
-            menu.style.opacity = "1";
-        });
+    function handleClickOutside(e) {
+        if (!menu.contains(e.target)) {
+            document.removeEventListener('click', handleClickOutside);
+            menu.addEventListener("transitionend", (e) => {
+                document.body.removeChild(e.target);
+            }, { once: true });
+            menu.classList.add('deleted');
+        }
     }
+
+    menu.addEventListener('transitionend', () => {
+        document.addEventListener('click', handleClickOutside);
+    }, { once: true })
 }
