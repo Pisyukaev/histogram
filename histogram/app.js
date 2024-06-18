@@ -4,6 +4,7 @@ const COLUMN_MAX_HEIGHT = 320;
 const COLUMN_GAP = 28;
 const CONTEXTMENU_HEIGHT = 90;
 const PADDING_MENU_OFFSET = 50;
+
 document.getElementById("input").addEventListener("input", (e) => {
     refresh(e.target.value);
 })
@@ -26,9 +27,9 @@ function refresh(data) {
         values.forEach((value, index) => {
             const elem = frame.children[index];
             const desiredHeight = value / coof;
-            if(elem && !elem?.classList.contains('deleted')) {
+            if(elem && !elem.classList.contains('deleted')) {
                 elem.style.height = desiredHeight + "px";
-                elem.id = `${index} ${value}`;
+                elem.onclick = (e) => handleContextMenu(e, index, value);
             } else {
                 const column = document.createElement('div');
                 column.className = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
@@ -37,9 +38,8 @@ function refresh(data) {
                 requestAnimationFrame(() => {
                     column.style.height = desiredHeight + "px";
                     column.style.width = COLUMN_WIDTH + "px";
-                    column.id = `${index} ${value}`;
                 });
-                column.addEventListener('click', handleContextMenu);
+                column.onclick = (e) => handleContextMenu(e, index, value);
             }
         });
     }
@@ -47,11 +47,11 @@ function refresh(data) {
     frame.style.width = Math.abs(values.length * COLUMN_WIDTH + (values.length - 1) * COLUMN_GAP) + "px";
 }
 
-function handleContextMenu(e) {
+function handleContextMenu(e, id, value) {
     const menu = document.createElement('div');
     const info = document.createElement('h3');
 
-    info.innerText = `#${parseInt(e.target.id.split(" ")[0]) + 1}\nValue: ${e.target.id.split(" ")[1]}`;
+    info.innerText = `#${id + 1}\nValue: ${value}`;
     info.className = "text-slate-300 whitespace-nowrap w-fit";
     menu.className = `absolute top-[${e.pageY}px] left-[${e.pageX}px] bg-zinc-900 bg-opacity-40 border-[1px] overflow-hidden
     opacity-0 w-0 h-0 transition-all duration-[200ms] border-zinc-700 backdrop-blur-md rounded-xl py-3 px-5 shadow-lg`;
