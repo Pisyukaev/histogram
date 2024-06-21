@@ -27,24 +27,25 @@ function refresh(data) {
         values.forEach((value, index) => {
             const elem = frame.children[index];
             const desiredHeight = value / coof;
-            if(elem && !elem.classList.contains('deleted')) {
-                elem.style.height = desiredHeight + "px";
-                elem.id = index + 1;
-                elem.dataset.value = value;
-            } else {
+            if(elem && !elem.classList.contains('deleted')) alterColumnProperties(elem, desiredHeight, index + 1, value);
+            else {
                 const column = document.createElement('div');
                 column.className = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
                 to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
                 frame.appendChild(column);
                 requestAnimationFrame(() => {
-                    column.style.height = desiredHeight + "px";
+                    alterColumnProperties(column, desiredHeight, index + 1, value);
                     column.style.width = COLUMN_WIDTH + "px";
-                    column.id = index + 1;
-                    column.dataset.value = value;
                 });
                 column.onclick = handleContextMenu;
             }
         });
+    }
+
+    function alterColumnProperties(elem, height, id, value) {
+        elem.style.height = height + "px";
+        elem.id = id;
+        elem.dataset.value = value;
     }
 
     frame.style.width = Math.abs(values.length * COLUMN_WIDTH + (values.length - 1) * COLUMN_GAP) + "px";
