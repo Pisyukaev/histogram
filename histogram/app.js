@@ -69,15 +69,14 @@ function handleContextMenu(e) {
 
     function handleClickOutside(e) {
         if (!menu.contains(e.target)) {
-            document.removeEventListener('click', handleClickOutside);
+            document.removeEventListener('click', handleClickOutside, true);
             menu.addEventListener("transitionend", (e) => {
                 document.body.removeChild(e.target);
             }, { once: true });
             menu.classList.add('deleted');
         }
     }
-
-    document.addEventListener('mouseup', () => {
-        document.addEventListener('click', handleClickOutside);
-    }, { once: true })
+    e.stopPropagation();
+    document.addEventListener('click', handleClickOutside, true);
+    console.log(e);
 }
