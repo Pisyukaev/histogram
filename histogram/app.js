@@ -76,7 +76,5 @@ function handleContextMenu(e) {
             menu.classList.add('deleted');
         }
     }
-    e.stopPropagation();
     document.addEventListener('click', handleClickOutside, true);
-    console.log(e);
 }
