@@ -2,13 +2,10 @@ const CONTEXTMENU_HEIGHT = 90;
 const PADDING_MENU_OFFSET = 50;
 
 const frame = document.getElementById("frame");
-const main = new Histogram(56, 320, 28, frame);
+const histogram = new Histogram(56, 320, 28, frame);
 
 document.getElementById("input").addEventListener("input", (e) => {
-    const {values, coof} = main.manageData(e.target.value);
-    main.autoRemoveColmns(values);
-    main.addColumns(e.target.value, values, coof);
-    main.adjustWidth(values);
+    histogram.refreshColumns(e.target.value);
 })
 
 function handleContextMenu(e) {
