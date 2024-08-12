@@ -1,8 +1,9 @@
-class Histogram {
-    constructor(column_width, column_max_height, column_gap, frame) {
+export class Histogram {
+    constructor(column_width, column_max_height, column_gap, contextMenu, frame) {
         this.column_width = column_width;
         this.column_max_height = column_max_height;
         this.column_gap = column_gap;
+        this.contextMenu = contextMenu;
         this.frame = frame;
     }
 
@@ -13,8 +14,8 @@ class Histogram {
         return {values, coof}
     }
 
-    addColumns(data, values, coof) {
-        if(data) {
+    addColumns(values, coof, onclick) {
+        if(values) {
             values.forEach((value, index) => {
                 const elem = this.frame.children[index];
                 const desiredHeight = value / coof;
@@ -27,7 +28,7 @@ class Histogram {
                     requestAnimationFrame(() => {
                         alterColumnProperties(column, index + 1, value, desiredHeight, this.column_width);
                     });
-                    column.onclick = handleContextMenu;
+                    column.onclick = (e) => this.handleContextMenu(e, this.contextMenu);
                 }
             });
         }
@@ -60,7 +61,11 @@ class Histogram {
     refreshColumns(data) {
         const {values, coof} = this.manageData(data);
         this.removeColmns(values);
-        this.addColumns(data, values, coof);
+        this.addColumns(values, coof);
         this.adjustWidth(values);
+    }
+
+    handleContextMenu(e, contextMenu) {
+        contextMenu.draw(e);
     }
 }
