@@ -1,7 +1,7 @@
 export class ContextMenu {
-    constructor(contextmenu_height, padding_menu_offset) {
-        this.contextmenu_height = contextmenu_height;
-        this.padding_menu_offset = padding_menu_offset;
+    constructor(height, offset) {
+        this.height = height;
+        this.offset = offset;
     }
     
     draw(e) {
@@ -15,8 +15,8 @@ export class ContextMenu {
         menu.appendChild(info);
         document.body.appendChild(menu);
         requestAnimationFrame(() => {
-            menu.style.height = this.contextmenu_height + "px";
-            menu.style.width = info.getBoundingClientRect().width + this.padding_menu_offset + "px";
+            menu.style.height = this.height + "px";
+            menu.style.width = info.getBoundingClientRect().width + this.offset + "px";
             menu.style.opacity = "1";
         });
     

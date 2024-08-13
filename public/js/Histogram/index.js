@@ -1,9 +1,9 @@
 export class Histogram {
-    constructor(column_width, column_max_height, column_gap, contextMenu, frame) {
+    constructor(column_width, column_max_height, column_gap, handleContextMenu, frame) {
         this.column_width = column_width;
         this.column_max_height = column_max_height;
         this.column_gap = column_gap;
-        this.contextMenu = contextMenu;
+        this.handleContextMenu = handleContextMenu;
         this.frame = frame;
     }
 
@@ -14,30 +14,30 @@ export class Histogram {
         return {values, coof}
     }
 
-    addColumns(values, coof, onclick) {
+    addColumns(values, coof) {
         if(values) {
             values.forEach((value, index) => {
                 const elem = this.frame.children[index];
                 const desiredHeight = value / coof;
-                if(elem && !elem.classList.contains('deleted')) alterColumnProperties(elem, index + 1, value, desiredHeight);
-                else {
+                if(elem && !elem.classList.contains('deleted')){
+                    this.alterColumnProperties(elem, index + 1, value, [
+                        {'property': 'height', 'value': desiredHeight, 'type': 'px'},
+                        {'property': 'width', 'value': this.column_width, 'type': 'px'},
+                    ]);
+                } else {
                     const column = document.createElement('div');
                     column.className = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
                     to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
                     this.frame.appendChild(column);
                     requestAnimationFrame(() => {
-                        alterColumnProperties(column, index + 1, value, desiredHeight, this.column_width);
+                        this.alterColumnProperties(column, index + 1, value, [
+                            {'property': 'height', 'value': desiredHeight, 'type': 'px'},
+                            {'property': 'width', 'value': this.column_width, 'type': 'px'},
+                        ])
                     });
-                    column.onclick = (e) => this.handleContextMenu(e, this.contextMenu);
+                    column.onclick = this.handleContextMenu;
                 }
             });
-        }
-    
-        function alterColumnProperties(elem, id, value, height, width) {
-            elem.style.height = height + "px";
-            if(width) elem.style.width = width + "px";
-            elem.id = id;
-            elem.dataset.value = value;
         }
     }
 
@@ -65,7 +65,16 @@ export class Histogram {
         this.adjustWidth(values);
     }
 
-    handleContextMenu(e, contextMenu) {
-        contextMenu.draw(e);
+    alterColumnProperties(elem, id, value, data, className) {
+        let style = '';
+        
+        data.forEach((property) => {
+            style += `${property.property}: ${property.value}${property.type}; `;
+        });
+
+        elem.style = style;
+        elem.id = id;
+        elem.dataset.value = value;
+        if(className != undefined) elem.className = className;
     }
 }
