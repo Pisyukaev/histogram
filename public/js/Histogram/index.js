@@ -1,9 +1,14 @@
+import { alterElementProperties } from "../alterElementProperties/index.js";
+
+const COLUMN_CLASSNAME = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
+to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
+
 export class Histogram {
-    constructor(column_width, column_max_height, column_gap, handleContextMenu, frame) {
+    constructor(column_width, column_max_height, column_gap, contextMenu, frame) {
         this.column_width = column_width;
         this.column_max_height = column_max_height;
         this.column_gap = column_gap;
-        this.handleContextMenu = handleContextMenu;
+        this.contextMenu = contextMenu;
         this.frame = frame;
     }
 
@@ -20,22 +25,24 @@ export class Histogram {
                 const elem = this.frame.children[index];
                 const desiredHeight = value / coof;
                 if(elem && !elem.classList.contains('deleted')){
-                    this.alterColumnProperties(elem, index + 1, value, [
-                        {'property': 'height', 'value': desiredHeight, 'type': 'px'},
-                        {'property': 'width', 'value': this.column_width, 'type': 'px'},
+                    alterElementProperties(elem, [
+                        {'path': ['style', 'height'], 'value': `${desiredHeight}px`},
+                        {'path': ['id'], 'value': index + 1},
+                        {'path': ['dataset', 'value'], 'value': value},
                     ]);
                 } else {
                     const column = document.createElement('div');
-                    column.className = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
-                    to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
+                    column.className = COLUMN_CLASSNAME;
                     this.frame.appendChild(column);
                     requestAnimationFrame(() => {
-                        this.alterColumnProperties(column, index + 1, value, [
-                            {'property': 'height', 'value': desiredHeight, 'type': 'px'},
-                            {'property': 'width', 'value': this.column_width, 'type': 'px'},
-                        ])
+                        alterElementProperties(column, [
+                            {'path': ['style', 'height'], 'value': `${desiredHeight}px`},
+                            {'path': ['style', 'width'], 'value': `${this.column_width}px`},
+                            {'path': ['id'], 'value': index + 1},
+                            {'path': ['dataset', 'value'], 'value': value},
+                        ]);
                     });
-                    column.onclick = this.handleContextMenu;
+                    column.onclick = (e) => this.contextMenu.draw(e);
                 }
             });
         }
@@ -63,18 +70,5 @@ export class Histogram {
         this.removeColmns(values);
         this.addColumns(values, coof);
         this.adjustWidth(values);
-    }
-
-    alterColumnProperties(elem, id, value, data, className) {
-        let style = '';
-        
-        data.forEach((property) => {
-            style += `${property.property}: ${property.value}${property.type}; `;
-        });
-
-        elem.style = style;
-        elem.id = id;
-        elem.dataset.value = value;
-        if(className != undefined) elem.className = className;
     }
 }
