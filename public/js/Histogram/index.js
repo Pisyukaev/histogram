@@ -1,4 +1,4 @@
-import { alterElementProperties } from "../alterElementProperties/index.js";
+import { alterElementProperties } from "../utils/index.js";
 
 const COLUMN_CLASSNAME = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
 to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
@@ -62,7 +62,9 @@ export class Histogram {
     }
     
     adjustWidth(values) {
-        this.frame.style.width = Math.abs(values.length * this.column_width + (values.length - 1) * this.column_gap) + "px";
+        alterElementProperties(this.frame, [
+            {'path': ['style', 'width'], 'value': `${Math.abs(values.length * this.column_width + (values.length - 1) * this.column_gap)}px`},
+        ]);
     }
 
     refreshColumns(data) {

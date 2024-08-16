@@ -1,4 +1,4 @@
-import { alterElementProperties } from "../alterElementProperties/index.js";
+import { alterElementProperties } from "../utils/index.js";
 
 const MENU_CLASSNAME = (x, y) => {
     return `absolute top-[${y}px] left-[${x}px] bg-zinc-900 bg-opacity-40 border-[1px] overflow-hidden
