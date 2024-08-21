@@ -11,8 +11,21 @@
     <div class="mx-auto h-[376px] min-w-[197px] flex justify-between gap-5">
         <div class="flex justify-end flex-col gap-7">
             <div class="relative transition-all duration-300 grow flex items-end" id="frame"></div>
-            <input id="input" type="text" placeholder="x x x x ...." class="flex-none text-center
-            bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none px-2 text-slate-300">
+            <!-- <input id="input" type="text" placeholder="x x x x ...." class="flex-none text-center
+            bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none px-2 text-slate-300"> -->
+            <form id="dataform" class="flex justify-between gap-4 text-slate-300 w-fit">
+                <select id="currency_from" name="currency_from" class="flex-none text-center bg-transparent border-[1px]
+                border-zinc-800 rounded-lg h-7 outline-none px-1"></select>
+                <h3 class="text-gray-50 font-thin">from</h3>
+                <select id="currency_to" name="currency_to" class="flex-none text-center bg-transparent border-[1px]
+                border-zinc-800 rounded-lg h-7 outline-none px-1 mr-10"></select>
+
+                <input id="date_from" name="date_from" type="date" class="flex-none text-center
+                bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none">
+                <h3 class="text-gray-500 font-thin">-</h3>
+                <input id="date_to" name="date_to" type="date" class="flex-none text-center
+                bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none">
+            </form>
         </div>
     </div>
 </body>

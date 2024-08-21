@@ -13,7 +13,7 @@ export class Histogram {
     }
 
     manageData(data) {
-        const values = data.split(" ").filter(e => Number(e) || e == "0");
+        const values = data;
         const coof = Math.max(...values) / this.column_max_height;
 
         return {values, coof}
