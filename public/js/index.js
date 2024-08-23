@@ -28,8 +28,7 @@ function fetchData(data) {
     fetch(`https://api.frankfurter.app/${data.date_from}..${data.date_to}?from=${data.currency_from}&to=${data.currency_to}`)
     .then(resp => resp.json())
     .then((response) => {
-        const values = Object.values(response.rates).map(value => value[data.currency_to]);
-        histogram.refreshColumns(values);
+        histogram.refreshColumns(response.rates);
     });
 }
 
@@ -44,7 +43,6 @@ function fetchCurrencies() {
         currencies.forEach((currency) => {
             const currency_option = document.createElement('option');
             currency_option.innerText = currency;
-            currency_option.dataset.value = currency;
 
             currency_from.appendChild(currency_option);
             currency_to.appendChild(currency_option.cloneNode(true));

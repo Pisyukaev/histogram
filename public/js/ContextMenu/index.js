@@ -17,7 +17,7 @@ export class ContextMenu {
         const info = document.createElement('h3');
 
         alterElementProperties(info, [
-            {'path': ['innerText'], 'value': `#${e.target.id}\nValue: ${e.target.dataset.value}`},
+            {'path': ['innerText'], 'value': `${e.target.dataset.date}\nValue: ${e.target.dataset.value}`},
             {'path': ['className'], 'value': INFO_CLASSNAME},
         ]);
         menu.className = menuClassname(e.pageX, e.pageY);
