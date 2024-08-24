@@ -1,7 +1,8 @@
 import { alterElementProperties } from "../utils/index.js";
 
-const COLUMN_CLASSNAME = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0 min-h-[10px] bg-gradient-to-b from-[#43C7FF]
-to-[#003E9B] rounded-2xl transition-all duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
+const COLUMN_CLASSNAME = `cursor-pointer hover:scale-[1.04] flex-none mr-7 w-0 h-0
+min-h-[10px] bg-gradient-to-b from-[#43C7FF] to-[#003E9B] rounded-2xl transition-all
+duration-500 shadow-[0px_0px_21.5px_0px_rgba(36,135,209,0.30)]`;
 
 export class Histogram {
     constructor(column_width, column_max_height, column_gap, contextMenu, frame) {
@@ -22,18 +23,16 @@ export class Histogram {
 
     addColumns(values, coof) {
         if(values) {
-            Object.keys(values).forEach((key, index) => {
-                const property = values[key];
-                const value = Object.values(property)[0];
-                const currency = Object.keys(property)[0];
+            Object.entries(values).forEach(([date, property], index) => {
+                const [[currency, value]] = Object.entries(property);
                 const elem = this.frame.children[index];
-                const desiredHeight = value / coof;
+                const desiredHeight = Number(value) / Number(coof);
                 if(elem && !elem.classList.contains('deleted')){
                     alterElementProperties(elem, [
                         {'path': ['style', 'height'], 'value': `${desiredHeight}px`},
                         {'path': ['id'], 'value': index + 1},
                         {'path': ['dataset', 'value'], 'value': `${value} ${currency}`},
-                        {'path': ['dataset', 'date'], 'value': key},
+                        {'path': ['dataset', 'date'], 'value': date},
                     ]);
                 } else {
                     const column = document.createElement('div');
@@ -45,7 +44,7 @@ export class Histogram {
                             {'path': ['style', 'width'], 'value': `${this.column_width}px`},
                             {'path': ['id'], 'value': index + 1},
                             {'path': ['dataset', 'value'], 'value': `${value} ${currency}`},
-                            {'path': ['dataset', 'date'], 'value': key},
+                            {'path': ['dataset', 'date'], 'value': date},
                         ]);
                     });
                     column.onclick = (e) => this.contextMenu.draw(e);
@@ -77,6 +76,5 @@ export class Histogram {
         const {values, coof} = this.manageData(data);
         this.removeColmns(values);
         this.addColumns(values, coof);
-        // this.adjustWidth(values);
     }
 }
