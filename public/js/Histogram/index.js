@@ -23,16 +23,15 @@ export class Histogram {
 
     addColumns(values, coof) {
         if(values) {
-            Object.entries(values).forEach(([date, property], index) => {
-                const [[currency, value]] = Object.entries(property);
+            values.forEach((data, index) => {
                 const elem = this.frame.children[index];
-                const desiredHeight = Number(value) / Number(coof);
+                const desiredHeight = Number(data.value) / Number(coof);
                 if(elem && !elem.classList.contains('deleted')){
                     alterElementProperties(elem, [
                         {'path': ['style', 'height'], 'value': `${desiredHeight}px`},
                         {'path': ['id'], 'value': index + 1},
-                        {'path': ['dataset', 'value'], 'value': `${value} ${currency}`},
-                        {'path': ['dataset', 'date'], 'value': date},
+                        {'path': ['dataset', 'value'], 'value': `${data.value} ${data.unit}`},
+                        {'path': ['dataset', 'date'], 'value': data.title},
                     ]);
                 } else {
                     const column = document.createElement('div');
@@ -43,8 +42,8 @@ export class Histogram {
                             {'path': ['style', 'height'], 'value': `${desiredHeight}px`},
                             {'path': ['style', 'width'], 'value': `${this.column_width}px`},
                             {'path': ['id'], 'value': index + 1},
-                            {'path': ['dataset', 'value'], 'value': `${value} ${currency}`},
-                            {'path': ['dataset', 'date'], 'value': date},
+                            {'path': ['dataset', 'value'], 'value': `${data.value} ${data.unit}`},
+                            {'path': ['dataset', 'date'], 'value': data.title},
                         ]);
                     });
                     column.onclick = (e) => this.contextMenu.draw(e);
@@ -54,7 +53,7 @@ export class Histogram {
     }
 
     removeColmns(values) {
-        for(let i = this.frame.children.length - 1; i >= Object.keys(values).length; i--) {
+        for(let i = this.frame.children.length - 1; i >= values; i--) {
             const column = this.frame.children[i];
             if(!column.classList.contains('deleted')){
                 column.classList.add('deleted');
