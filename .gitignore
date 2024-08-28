@@ -12,6 +12,10 @@ coverage
 # Benchmarking
 benchmarks/graphs
 
+#parcel
+dist
+.parcel-cache
+
 .env
 
 # ignore additional files using core.excludesFile

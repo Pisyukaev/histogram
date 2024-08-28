@@ -1,8 +1,9 @@
 import { Histogram } from "./Histogram/index.js";
 import { ContextMenu } from "./ContextMenu/index.js";
+import 'dotenv/config'
 
-const API_URL = 'https://api.frankfurter.app';
-const SCROLL_SENSITIVITY = 50;
+const apiUrl = process.env.API_URL;
+const scrollSensitivity = process.env.SCROLL_SENSITIVITY;
 
 const frame = document.getElementById("frame");
 const frame_wrapper = document.getElementById("frame_wrapper");
@@ -13,27 +14,22 @@ const dataForm = document.getElementById('dataform');
 
 function fetchData(data) {
     if(data.date_from != data.date_to && data.currency_from != data.currency_to) {
-        fetch(`${API_URL}/${data.date_from}..${data.date_to}?from=${data.currency_from}&to=${data.currency_to}`)
+        fetch(`${apiUrl}/${data.date_from}..${data.date_to}?from=${data.currency_from}&to=${data.currency_to}`)
         .then(resp => resp.json())
         .then((response) => {
             const values = [];
-            Object.entries(response.rates).forEach(([key, property]) => {
+            Object.entries(response.rates).forEach(([title, property]) => {
                 const [[unit, value]] = Object.entries(property);
-                const obj = {
-                    'value': value,
-                    'title': key,
-                    'unit': unit,
-                }
+                const obj = { value, title, unit }
                 values.push(obj);
             });
-            console.log(values);
             histogram.refreshColumns(values);
         });
     }
 }
 
 function fetchCurrencies() {
-    fetch(`${API_URL}/currencies`)
+    fetch(`${apiUrl}/currencies`)
     .then(resp => resp.json())
     .then((data) => {
         const currencies = Object.keys(data);
@@ -60,6 +56,8 @@ dataForm.addEventListener('change', (e) => {
 });
 
 window.addEventListener("wheel",(e) => {
-    if (e.deltaY > 0) frame_wrapper.scrollLeft += SCROLL_SENSITIVITY;
-    else frame_wrapper.scrollLeft -= SCROLL_SENSITIVITY;
+    if(e.deltaX == 0) {
+        if (e.deltaY > 0) frame_wrapper.scrollLeft += Number(scrollSensitivity);
+        else frame_wrapper.scrollLeft -= Number(scrollSensitivity);
+    }
 });
