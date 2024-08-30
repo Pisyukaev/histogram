@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>Pedro</title>
+</head>
+<body class="bg-[#171717] flex justify-center flex-col h-screen">
+    <div class="mx-auto min-w-[197px] flex justify-between gap-5">
+        <div class="flex justify-end flex-col gap-7">
+            <div class="relative max-w-[60vw]">
+                <div class="absolute inset-[-10px] z-10 pointer-events-none shadow-[0_0_15px_30px_#171717_inset]"></div>
+                <div id="frame_wrapper" class="p-10 overflow-x-scroll overflow-y-hidden">
+                    <div class="relative transition-all duration-300 w-fit flex items-end mr-[-28px]" id="frame"></div>
+                </div>
+            </div>
+            
+            <form id="dataform" class="flex justify-between gap-4 w-fit mx-auto">
+                <select id="currency_from" name="currency_from" class="text-slate-300 flex-none text-center bg-transparent border-[1px]
+                border-zinc-800 rounded-lg h-7 outline-none px-1"></select>
+                <h3 class="text-gray-50 font-thin">from</h3>
+                <select id="currency_to" name="currency_to" class="text-slate-300 flex-none text-center bg-transparent border-[1px]
+                border-zinc-800 rounded-lg h-7 outline-none px-1 mr-10"></select>
+
+                <input id="date_from" name="date_from" type="date" class="text-slate-300 flex-none text-center
+                bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none">
+                <h3 class="text-gray-500 font-thin">-</h3>
+                <input id="date_to" name="date_to" type="date" class="text-slate-300 flex-none text-center
+                bg-transparent border-[1px] border-zinc-800 rounded-lg h-7 outline-none">
+            </form>
+        </div>
+    </div>
+</body>
+<script type="module" src="./js/index.js"></script>
+</html>

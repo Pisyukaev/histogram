@@ -1,8 +1,9 @@
 import { alterElementProperties } from "../utils/index.js";
 
 const menuClassname = (x, y) => {
-    return `absolute top-[${y}px] left-[${x}px] bg-zinc-900 bg-opacity-40 border-[1px] overflow-hidden
-        opacity-0 w-0 h-0 transition-all duration-[200ms] border-zinc-700 backdrop-blur-md rounded-xl py-3 px-5 shadow-lg`
+    return `absolute top-[${y}px] left-[${x}px] bg-zinc-900 bg-opacity-40 border-[1px]
+    overflow-hidden z-20 opacity-0 w-0 h-0 transition-all duration-[200ms] border-zinc-700
+    backdrop-blur-md rounded-xl py-3 px-5 shadow-lg`
 }
 const INFO_CLASSNAME = 'text-slate-300 whitespace-nowrap w-fit';
 
@@ -15,9 +16,10 @@ export class ContextMenu {
     draw(e) {
         const menu = document.createElement('div');
         const info = document.createElement('h3');
+        const data = e.target.dataset;
 
         alterElementProperties(info, [
-            {'path': ['innerText'], 'value': `#${e.target.id}\nValue: ${e.target.dataset.value}`},
+            {'path': ['innerText'], 'value': `${data.date}\nValue: ${data.value}`},
             {'path': ['className'], 'value': INFO_CLASSNAME},
         ]);
         menu.className = menuClassname(e.pageX, e.pageY);

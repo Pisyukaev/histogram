@@ -1,6 +1,5 @@
 # npm
 node_modules
-package-lock.json
 npm-shrinkwrap.json
 *.log
 *.gz
@@ -11,6 +10,12 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+#parcel
+dist
+.parcel-cache
+
+.env
 
 # ignore additional files using core.excludesFile
 # https://git-scm.com/docs/gitignore
