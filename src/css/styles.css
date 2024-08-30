@@ -4,3 +4,7 @@
     margin-right: 0px !important;
     padding: 0px !important;
 }
+
+select option {
+    background-color: #171717;
+}

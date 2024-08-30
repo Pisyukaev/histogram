@@ -17,13 +17,13 @@ function fetchData(data) {
         fetch(`${apiUrl}/${data.date_from}..${data.date_to}?from=${data.currency_from}&to=${data.currency_to}`)
         .then(resp => resp.json())
         .then((response) => {
-            const values = [];
-            Object.entries(response.rates).forEach(([title, property]) => {
-                const [[unit, value]] = Object.entries(property);
-                const obj = { value, title, unit }
-                values.push(obj);
-            });
-            histogram.refreshColumns(values);
+            histogram.refreshColumns(
+                Object.entries(response.rates).map(([title, property]) => {
+                    const [[unit, value]] = Object.entries(property);
+                    const obj = { value, title, unit }
+                    return obj;
+                })
+            );
         });
     }
 }
@@ -48,16 +48,20 @@ function fetchCurrencies() {
 
 fetchCurrencies();
 
-dataForm.addEventListener('change', (e) => {
+dataForm.addEventListener('change', () => {
     const data = Object.fromEntries(new FormData(dataForm).entries());
-    if(data.currency_from && data.currency_to && data.date_from && data.date_to) {
+    if(data.currency_from && data.currency_to && data.date_from && data.date_to
+    && Date.parse(data.date_from) < Date.parse(data.date_to)) {
         fetchData(data);
     } 
 });
 
 window.addEventListener("wheel",(e) => {
     if(e.deltaX == 0) {
-        if (e.deltaY > 0) frame_wrapper.scrollLeft += Number(scrollSensitivity);
-        else frame_wrapper.scrollLeft -= Number(scrollSensitivity);
+        if (e.deltaY > 0) {
+            frame_wrapper.scrollLeft += Number(scrollSensitivity);
+        } else {
+            frame_wrapper.scrollLeft -= Number(scrollSensitivity);
+        }
     }
 });
